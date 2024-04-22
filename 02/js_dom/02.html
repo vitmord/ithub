@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Random Number Table</title>
+        <style>
+            table {
+                border-collapse: collapse;
+            }
+            table,
+            th,
+            td {
+                border: 1px solid #333;
+                padding: 10px;
+                text-align: center;
+            }
+
+            .orange {
+                background-color: orange;
+            }
+        </style>
+    </head>
+    <body>
+        <button onclick="addRandomNumber()">Добавить число</button>
+
+        <script>
+            let numbers = []
+            for (let i = 0; i < 30; i++) {
+                numbers.push(Math.floor(Math.random() * 100))
+            }
+
+            let table = document.createElement('table')
+            table.id = 'table'
+            let rowIndex = 0
+            for (let i = 0; i < numbers.length; i += 6) {
+                let row = table.insertRow(rowIndex++)
+                for (let j = 0; j < 6; j++) {
+                    let cell = row.insertCell(j)
+                    cell.textContent = numbers[i + j]
+                    if (numbers[i + j] >= 50) {
+                        cell.classList.add('orange')
+                    }
+                }
+            }
+
+            function addRandomNumber() {
+                let indexToReplace = Math.floor(Math.random() * numbers.length)
+                let newNumber = Math.floor(Math.random() * 100)
+                numbers[indexToReplace] = newNumber
+
+                let table = document.getElementById('table')
+                let rowIndex = Math.floor(indexToReplace / 6)
+                let cellIndex = indexToReplace % 6
+                let cell = table.rows[rowIndex].cells[cellIndex]
+                cell.textContent = newNumber
+
+                cell.classList.remove('orange')
+                if (newNumber >= 50) {
+                    cell.classList.add('orange')
+                }
+            }
+
+            document.body.appendChild(table)
+        </script>
+    </body>
+</html>
