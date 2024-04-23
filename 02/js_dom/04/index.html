@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Slider</title>
+        <style>
+            #sliderContainer {
+                width: 500px;
+                margin: 100px auto;
+                position: relative;
+            }
+
+            #slider {
+                width: 100%;
+                height: 20px;
+                border: 1px solid #25eb85;
+                border-radius: 15px;
+                position: relative;
+                cursor: pointer;
+            }
+
+            #slider .slider-handle {
+                width: 20px;
+                height: 20px;
+                background-color: #229a0d;
+                position: absolute;
+                top: 0;
+                left: 0;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+            #sliderValue {
+                text-align: center;
+                font-size: 1.5rem;
+                position: absolute;
+                bottom: 30px;
+                left: 0;
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="sliderContainer">
+            <div id="slider">
+                <div class="slider-handle" id="handle"></div>
+                <div id="sliderValue">50</div>
+            </div>
+        </div>
+
+        <script>
+            const slider = document.getElementById('slider')
+            const handle = document.getElementById('handle')
+            const sliderValue = document.getElementById('sliderValue')
+
+            let sliderWidth = slider.clientWidth
+            let handleWidth = handle.clientWidth
+            let minValue = 0
+            let maxValue = sliderWidth - handleWidth
+            let currentValue = maxValue / 2
+
+            function updateSlider(value) {
+                handle.style.left = value + 'px'
+                sliderValue.textContent = Math.round((value / maxValue) * 100)
+                sliderValue.style.left = value + handleWidth / 2 - sliderValue.clientWidth / 2 + 'px'
+
+            function handleDrag(event) {
+                event.preventDefault()
+                let newPosition = event.clientX - slider.getBoundingClientRect().left - handleWidth / 2
+                if (newPosition < minValue) {
+                    newPosition = minValue
+                } else if (newPosition > maxValue) {
+                    newPosition = maxValue
+                }
+                currentValue = newPosition
+                updateSlider(newPosition)
+            }
+
+            handle.addEventListener('mousedown', () => {
+                document.addEventListener('mousemove', handleDrag)
+            })
+
+            document.addEventListener('mouseup', () => {
+                document.removeEventListener('mousemove', handleDrag)
+            })
+
+            updateSlider(currentValue)
+        </script>
+    </body>
+</html>
